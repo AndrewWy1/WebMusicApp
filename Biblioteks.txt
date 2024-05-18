@@ -1,0 +1,15 @@
+react
+tailwiind
+nodemon
+postpcss
+autoprefix
+yarn
+express
+firebase
+mongodb
+FcGoogle
+framer-motion
+axios
+mongoose
+dotenv
+firebase-admin
