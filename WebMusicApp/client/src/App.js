@@ -4,13 +4,15 @@ import { Login, Home } from './components';
 import { app } from "./config/firebase.cofig";
 import { getAuth, } from "firebase/auth";
 import { AnimatePresence } from "framer-motion";
+import { validateUser } from './api';
+import { useStateValue } from './context/StateProvider';
+import { actionType } from "./context/reducer";
 
 const App = () => {
   const firebaseAuth = getAuth(app);
   const navigate = useNavigate();
-  // const [{ user, allSongs, song, isSongPlaying, miniPlayer }, dispatch] =
-  //   useStateValue();
-  // const [isLoading, setIsLoading] = useState(false);
+
+  const [{ user }, dispatch] = useStateValue();
 
 
   const [auth, setAuth] = useState(false || window.localStorage.getItem("auth" === "true"));
@@ -22,20 +24,20 @@ const App = () => {
         userCred.getIdToken().then((token) => {
           console.log(token);
           //window.localStorage.setItem("auth", "true");
-          // validateUser(token).then((data) => {
-          //   // dispatch({
-          //   //   type: actionType.SET_USER,
-          //   //   user: data,
-          //   // });
-          // });
+          validateUser(token).then((data) => {
+            dispatch({
+              type: actionType.SET_USER,
+              user: data,
+            });
+          });
         });
         //setIsLoading(false);
       } else {
         setAuth(false);
-        // dispatch({
-        //   type: actionType.SET_USER,
-        //   user: null,
-        // });
+        dispatch({
+          type: actionType.SET_USER,
+          user: null,
+        });
         //setIsLoading(false);
         window.localStorage.setItem("auth", "false");
         navigate("/login");
