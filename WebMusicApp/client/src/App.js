@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { Login, Home } from './components';
+import { Login, Home, Dashboard } from './components';
 import { app } from "./config/firebase.cofig";
 import { getAuth, } from "firebase/auth";
 import { AnimatePresence } from "framer-motion";
@@ -51,6 +51,7 @@ const App = () => {
         <Routes>
           <Route path='/login' element={<Login setAuth={setAuth} />} />
           <Route path='/*' element={<Home />} />
+          <Route path='/dashboard/*' element={<Dashboard />}></Route>
         </Routes>
       </div>
     </AnimatePresence>
