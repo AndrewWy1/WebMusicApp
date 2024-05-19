@@ -9,7 +9,7 @@ router.get("/getAll", async (req, res) => {
         return res.status(200).send({ success: true, albums: data });
     }
     else {
-        return res.status(400).send({ success: false, message: "Artist not found" });
+        return res.status(400).send({ success: false, message: "Album not found" });
     }
 });
 
@@ -23,7 +23,7 @@ router.get("/getAlbum/:id", async (req, res) => {
         return res.status(200).send({ success: true, album: data });
     }
     else {
-        return res.status(400).send({ success: false, message: "Artist not found" });
+        return res.status(400).send({ success: false, message: "Song not found" });
     }
 });
 
