@@ -10,7 +10,7 @@ const artistSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        twitter:{
+        X:{
             type:String,
             required: true,
         },
