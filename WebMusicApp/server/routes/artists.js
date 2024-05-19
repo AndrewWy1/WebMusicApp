@@ -6,7 +6,7 @@ router.get("/getAll", async (req, res) => {
 
     const data = await artist.find().sort({ createdAt: 1 });
     if (data) {
-        return res.status(200).send({ success: true, artists: data });
+        return res.status(200).send({ success: true, data: data });
     }
     else {
         return res.status(400).send({ success: false, message: "Artist not found" });
@@ -20,7 +20,7 @@ router.get("/getArtist/:id", async (req, res) => {
     const data = await artist.findOne(filter);
 
     if (data) {
-        return res.status(200).send({ success: true, artist: data });
+        return res.status(200).send({ success: true, data: data });
     }
     else {
         return res.status(400).send({ success: false, message: "Artist not found" });
@@ -40,7 +40,7 @@ router.post("/set", async (req, res) => {
 
     try {
         const savedArtist = await newArtist.save();
-        return res.status(200).send({ success: true, artist: savedArtist });
+        return res.status(200).send({ success: true, data: savedArtist });
     }
     catch (error) {
         return res.status(400).send({ success: false, message: error });

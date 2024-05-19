@@ -8,7 +8,6 @@ router.get("/login", async (req, res) => {
     }
 
     const token = req.headers.authorization.split(" ")[1];
-
     try {
         const decodeValue = await admin.auth().verifyIdToken(token);
         if (!decodeValue) {
@@ -69,5 +68,16 @@ const updateUserData = async (decodeValue, req, res) => {
         res.status(400).send({ success: false, msg: err });
     }
 };
+
+router.get("/getAll", async (req, res) => {
+
+    const data = await user.find().sort({ createdAt: 1 });
+    if (data) {
+        return res.status(200).send({ success: true, data: data });
+    }
+    else {
+        return res.status(400).send({ success: false, message: "Users not found" });
+    }
+});
 
 module.exports = router;
