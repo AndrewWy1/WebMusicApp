@@ -50,3 +50,23 @@ export const getAllAlbums = async () => {
         return null;
     }
 };
+
+export const changinUserRole = async (userId, role) => {
+    try {
+        const res = axios.put(`${baseURL}api/users/updateRole/${userId}`, { data: { role: role } })
+        return res;
+    }
+    catch (error) {
+        return null;
+    }
+}
+
+export const removeUser = async (userId) => {
+    try {
+        const res = axios.delete(`${baseURL}api/users/deleteUser/${userId}`)
+        return res;
+    }
+    catch (error) {
+        return null;
+    }
+}

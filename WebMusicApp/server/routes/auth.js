@@ -59,7 +59,7 @@ const updateUserData = async (decodeValue, req, res) => {
     try {
         const result = await user.findOneAndUpdate(
             filter,
-            { auth_time: decodeValue.auth_time},
+            { auth_time: decodeValue.auth_time },
             options
         );
         res.status(200).send({ user: result });
@@ -77,6 +77,33 @@ router.get("/getAll", async (req, res) => {
     }
     else {
         return res.status(400).send({ success: false, message: "Users not found" });
+    }
+});
+
+router.put("/updateRole/:userId", async (req, res) => {
+    console.log(req.body.data.role, req.params.userId);
+    const filter = { _id: req.params.userId };
+    const role = req.body.data.role;
+
+    try {
+        const result = await user.findOneAndUpdate(filter, { role: role });
+        res.status(200).send({ user: result });
+    }
+    catch (error) {
+        res.status(400).send({ success: false, message: error });
+    }
+});
+
+
+router.delete("/deleteUser/:userId", async (req, res) => {
+    const filter = { _id: req.params.userId };
+
+    const result = await user.deleteOne(filter);
+    if (result.deletedCount === 1) {
+        res.status(200).send({ success: true, message: "User Removed" });
+    } 
+    else {
+        res.status(200).send({ success: false, message: "User don't find" });
     }
 });
 
