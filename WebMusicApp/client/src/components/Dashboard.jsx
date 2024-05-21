@@ -9,6 +9,7 @@ import DashboardUsers from "./DashboardUsers";
 import DashboardSongs from "./DashboardSongs";
 import DashboardArtists from "./DashboardArtists";
 import DashboardAlbums from "./DashboardAlbums";
+import DashboardNewSong from './DashboardNewSong';
 
 
 
@@ -32,7 +33,7 @@ const Dashboard = () => {
                     <Route path='/songs' element={<DashboardSongs/>}/>
                     <Route path='/artists' element={<DashboardArtists/>}/>
                     <Route path='/albums' element={<DashboardAlbums/>}/>
-                    <Route path='/newSong' element={<DashboardHome/>}/>
+                    <Route path='/newSong' element={<DashboardNewSong/>}/>
                 </Routes>
             </div>
 
