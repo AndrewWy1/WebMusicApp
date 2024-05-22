@@ -4,6 +4,9 @@ export const actionType = {
     SET_ALL_ARTISTS: "SET_ALL_ARTISTS",
     SET_ALL_SONGS: "SET_ALL_SONGS",
     SET_ALL_ALBUMS: "SET_ALL_ALBUMS",
+    SET_GENRE_FILTER: "SET_GENRE_FILTER",
+    SET_ARTIST_FILTER: "SET_ARTIST_FILTER",
+    SET_ALBUM_FILTER: "SET_ALBUM_FILTER",
 };
 
 const reducer = (state, action) => {
@@ -36,6 +39,26 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 allAlbums: action.allAlbums,
+            }
+
+        case actionType.SET_GENRE_FILTER:
+            return {
+                ...state,
+                genreFilter: action.genreFilter,
+            }
+
+
+        case actionType.SET_ARTIST_FILTER:
+            return {
+                ...state,
+                artistFilter: action.artistFilter,
+            }
+
+
+        case actionType.SET_ALBUM_FILTER:
+            return {
+                ...state,
+                albumFilter: action.albumFilter,
             }
 
         default:
