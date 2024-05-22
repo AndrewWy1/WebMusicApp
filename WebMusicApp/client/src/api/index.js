@@ -73,10 +73,20 @@ export const removeUser = async (userId) => {
 
 export const deleteSongById = async (id) => {
     try {
-      const res = axios.delete(`${baseURL}api/songs/delete/${id}`);
-      return res;
+        const res = axios.delete(`${baseURL}api/songs/delete/${id}`);
+        return res;
+    }
+    catch (error) {
+        return null;
+    }
+};
+
+export const saveNewSong = async data => {
+    try {
+        const res = axios.post(`${baseURL}api/songs/set`, { ...data });
+        return (await res).data.savedSong;
     } 
     catch (error) {
-      return null;
+        return null;
     }
-  };
+}
