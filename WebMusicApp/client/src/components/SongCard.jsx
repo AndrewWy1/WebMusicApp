@@ -1,55 +1,83 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
-import { deleteSongById, getAllSongs } from '../api';
+import { deleteAlbumById, deleteArtistById, deleteSongById, getAllAlbums, getAllArtists, getAllSongs } from '../api';
 import { motion } from 'framer-motion';
 import { IoTrash } from 'react-icons/io5';
 
-const SongCard = ({ data, index }) => {
+const SongCard = ({ data, index, type }) => {
   const [isDeleted, setIsDeleted] = useState(false);
 
-  const [{ allSongs, song, isSongPlaying }, dispatch] = useStateValue();
+  const [{ allSongs, allArtists, allAlbums, songIndex, isSongPlaying }, dispatch] = useStateValue();
 
-  const addSongToContext = () => {
+
+  const deleteData = (data) => {
+    switch (type) {
+      case "song": {
+        deleteSongById(data._id).then((res) => {
+          getAllSongs().then((data) => {
+            dispatch({
+              type: actionType.SET_ALL_SONGS,
+              allSongs: data.data,
+            });
+          });
+        });
+
+        break;
+      }
+      case "album": {
+        deleteAlbumById(data._id).then((res) => {
+          getAllAlbums().then((data) => {
+            dispatch({
+              type: actionType.SET_ALL_ALBUMS,
+              allAlbums: data.data,
+            });
+          });
+        });
+
+        break;
+      }
+      case "artist": {
+        deleteArtistById(data._id).then((res) => {
+          getAllArtists().then((data) => {
+            dispatch({
+              type: actionType.SET_ALL_ARTISTS,
+              allArtists: data.data,
+            });
+          });
+        });
+
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  };
+  const addToContext = () => {
     if (!isSongPlaying) {
       dispatch({
-        type: actionType.SET_SONG_PLAYING,
+        type: actionType.SET_ISSONG_PLAYING,
         isSongPlaying: true,
       });
     }
-    if (song !== index) {
+
+    if(songIndex !== index){
       dispatch({
-        type: actionType.SET_SONG,
-        song: index,
+        type: actionType.SET_SONG_INDEX,
+        songIndex: index,
       });
     }
-  };
-
-  const deleteObject = (id) => {
-    console.log(id);
-    deleteSongById(id).then((res) => {
-      // console.log(res.data);
-      if (res.data.success) {
-        getAllSongs().then((data) => {
-          dispatch({
-            type: actionType.SET_ALL_SONGS,
-            allSongs: data.data,
-          });
-        });
-        setTimeout(() => {
-        }, 4000);
-      } 
-    });
-  };
+  }
   return (
     <motion.div
       whileTap={{ scale: 0.8 }}
       initial={{ opacity: 0, translateX: -50 }}
       animate={{ opacity: 1, translateX: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
+      onClick={type === "song" && addToContext}
       className="relative w-40 min-w-210 px-2 py-4 cursor-pointer hover:shadow-xl hover:bg-card bg-gray-100 shadow-md 
       rounded-lg flex flex-col items-center"
-      onClick={addSongToContext}
     >
       {isDeleted && (
         <motion.div
@@ -63,18 +91,20 @@ const SongCard = ({ data, index }) => {
           </p>
 
           <div className="flex items-center gap-3">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.7 }}
               className="text-sm px-4 py-1 rounded-md text-white hover:shadow-md bg-teal-400"
-              onClick={() => deleteObject(data._id)}
+              onClick={() => deleteData(data)}
             >
               Yes
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.7 }}
               className="text-sm px-4 py-1 rounded-md text-white hover:shadow-md bg-gray-400"
               onClick={() => setIsDeleted(false)}
             >
               No
-            </button>
+            </motion.button>
           </div>
         </motion.div>
       )}
@@ -90,8 +120,11 @@ const SongCard = ({ data, index }) => {
 
       <p className="text-base text-headingColor font-semibold my-2">
         {data.name.length > 20 ? `${data.name.slice(0, 20)}...` : data.name}
-        <span className="block text-sm text-gray-400 my-1">
-          {data.artist.length > 20 ? `${data.artist.slice(0, 20)}...` : data.artist}</span>
+        {data.artist && (
+          <span className="block text-sm text-gray-400 my-1">
+            {data.artist.length > 20 ? `${data.artist.slice(0, 20)}...` : data.artist}
+          </span>
+        )}
       </p>
 
       <div className="w-full absolute bottom-2 right-2 flex items-center justify-between px-4">

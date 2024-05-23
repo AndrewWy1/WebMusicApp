@@ -7,4 +7,6 @@ export const initialState = {
     genreFilter: "all",
     artistFilter: null,
     albumFilter: null,
+    isSongPlaying: false,
+    songIndex: 0,
 };

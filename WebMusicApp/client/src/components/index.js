@@ -7,6 +7,7 @@ export {default as Dashboard} from "./Dashboard";
 export {default as Header} from "./Header";
 export {default as SongCard} from "./SongCard";
 export {default as FilterButton} from "./FilterButton";
+export {default as MusicPlayer}  from "./MusicPlayer";
 
 //Dashboard pages
 export {default as DashboardHome} from "./DashboardHome";
