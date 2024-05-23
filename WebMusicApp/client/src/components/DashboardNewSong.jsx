@@ -22,22 +22,31 @@ import {
   saveNewSong,
 } from "../api/index";
 import { actionType } from "../context/reducer";
-import AlertSuccess from "./AlertSuccess";
-import AlertError from "./AlertError";
 import FilterButton from "./FilterButton";
 import { genreFilters } from "../utils/supportFunctions";
 
 const DashboardNewSong = () => {
 
-  const [songName, setSongName] = useState("")
+  const [songName, setSongName] = useState("");
   const [songPictureCover, setSongPictureCover] = useState(null)
   const [isImageLoading, setIsImageLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0);
   const [audioPictureCover, setAudioPictureCover] = useState(null);
   const [audioUploadingProgress, setAudioUploadingProgress] = useState(0);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
+  const [artistImageCover, setArtistImageCover] = useState(null);
+  const [artistUploadingProgress, setArtistUploadingProgress] = useState(0);
+  const [isArtistUploading, setIsArtistUploading] = useState(false);
+  const [artistName, setArtistName] = useState("");
+  const [x, setX] = useState("");
+  const [instagram, setInstagram] = useState("");
 
-  const [{ allSongs, allArtists, allAlbums, artistFilter, genreFilter, albumFilter }, dispatch] = useStateValue();
+  const [albumImageCover, setAlbumImageCover] = useState(null);
+  const [albumUploadingProgress, setAlbumUploadingProgress] = useState(0);
+  const [isAlbumUploading, setIsAlbumUploading] = useState(false);
+  const [albumName, setAlbumName] = useState("")
+
+  const [{ allSongs, allArtists, allAlbums, artistFilter, genreFilter, albumFilter, }, dispatch] = useStateValue();
 
 
   useEffect(() => {
@@ -64,22 +73,31 @@ const DashboardNewSong = () => {
     if (isImage) {
       setIsImageLoading(true);
       setIsAudioLoading(true);
+      setIsAlbumUploading(true)
+      setIsArtistUploading(true);
+
     }
     const deletRef = ref(storage, url);
     deleteObject(deletRef).then(() => {
+
+
       setSongPictureCover(null);
       setAudioPictureCover(null);
+      setAlbumImageCover(null);
+      setArtistImageCover(null);
+
       setIsImageLoading(false);
       setIsAudioLoading(false);
+      setIsAlbumUploading(false)
+      setIsArtistUploading(false);
     });
   }
 
-  const saveSong = () =>{
+  const saveSong = () => {
     if (!songPictureCover || !audioPictureCover) {
-      // setSetAlert("error");
-      // setAlertMsg("Required fields are missing");
-      
-    } 
+
+
+    }
     else {
       setIsImageLoading(true);
       setIsAudioLoading(true);
@@ -95,17 +113,13 @@ const DashboardNewSong = () => {
 
       saveNewSong(data).then((res) => {
         getAllSongs().then((songs) => {
-          dispatch({ 
-            type: actionType.SET_ALL_SONGS, 
-            allSongs: songs.data 
+          dispatch({
+            type: actionType.SET_ALL_SONGS,
+            allSongs: songs.data
           });
         });
       });
-      // setSetAlert("success");
-      // setAlertMsg("Data saved successfully");
-      // setTimeout(() => {
-      //   setSetAlert(null);
-      // }, 4000);
+
       setIsImageLoading(false);
       setIsAudioLoading(false);
       setSongName("");
@@ -115,6 +129,63 @@ const DashboardNewSong = () => {
       dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
       dispatch({ type: actionType.SET_GENRE_FILTER, genreFilter: null });
       // setDuration(null);
+    };
+  };
+
+  const saveArtist = () => {
+    if (!artistImageCover || !artistName || !x || !instagram) {
+
+    }
+    else {
+      setIsArtistUploading(true);
+      const data = {
+        name: artistName,
+        imageURL: artistImageCover,
+        X: x,
+        instagram: instagram,
+      }
+
+      saveNewArtist(data).then((res) => {
+        getAllArtists().then((artists) => {
+          dispatch({
+            type: actionType.SET_ALL_ARTISTS,
+            allArtists: artists.data
+          });
+        });
+      });
+
+      setIsArtistUploading(false);
+      setArtistImageCover(null);
+      setX("")
+      setInstagram("");
+      setArtistName("");
+    }
+  }
+
+  const saveAlbum = () => {
+    if (!albumImageCover || !albumName) {
+
+    }
+    else {
+      setIsAlbumUploading(true);
+
+      const data = {
+        name: albumName,
+        imageURL: albumImageCover,
+      }
+      saveNewAlbum(data).then((res) => {
+        getAllAlbums().then((album) => {
+          dispatch({
+            type: actionType.SET_ALL_ALBUMS,
+            allAlbums: album.data
+          });
+        });
+      });
+
+
+      setIsAlbumUploading(false);
+      setAlbumImageCover(null);
+      setAlbumName("");
     }
   }
 
@@ -123,7 +194,8 @@ const DashboardNewSong = () => {
       <input type="text" placeholder="Type the song: "
         className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
        border border-gray-300 bg-transparent"
-        onChange={(event) => setSongName(event.target.value)} />
+        onChange={(event) => setSongName(event.target.value)}
+        value={songName} />
 
       <div className=" w-full flex flex-wrap items-center justify-between gap-4">
         <FilterButton filterData={allArtists} flag={"Artists"} />
@@ -131,83 +203,194 @@ const DashboardNewSong = () => {
         <FilterButton filterData={genreFilters} flag={"Genres"} />
       </div>
 
-      <div className="w-full flex items-center justify-between gap-2 flex-wrap">
-        <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
-          {isImageLoading && <PictureLoader progress={uploadProgress} />}
-          {!isImageLoading && (
-            <>
-              {!songPictureCover ? (
-                <FileUploader
-                  updateState={setSongPictureCover}
-                  // setAlert={setSetAlert}
-                  // alertMsg={setAlertMsg}
-                  isLoading={setIsImageLoading}
-                  setProgress={setUploadProgress}
-                  IsPicture={true}
-                />
-              ) : (
-                <div className="relative w-full h-full overflow-hidden rounded-md">
-                  <img src={songPictureCover}
-                    alt="uploaded image"
-                    className="w-full h-full object-cover" />
 
-                  <button
-                    type="button"
-                    className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
-                    onClick={() => { deleteFile(songPictureCover, true); }}
-                  >
-                    <MdDelete className="text-white" />
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+      <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+        {isImageLoading && <PictureLoader progress={uploadProgress} />}
+        {!isImageLoading && (
+          <>
+            {!songPictureCover ? (
+              <FileUploader
+                updateState={setSongPictureCover}
+                isLoading={setIsImageLoading}
+                setProgress={setUploadProgress}
+                IsPicture={true}
+              />
+            ) : (
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <img src={songPictureCover}
+                  alt="uploaded image"
+                  className="w-full h-full object-cover" />
 
-        <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
-          {isAudioLoading && <PictureLoader progress={audioUploadingProgress} />}
-          {!isAudioLoading && (
-            <>
-              {!audioPictureCover ? (
-                <FileUploader
-                  updateState={setAudioPictureCover}
-                  // setAlert={setSetAlert}
-                  // alertMsg={setAlertMsg}
-                  isLoading={setIsAudioLoading}
-                  setProgress={setAudioUploadingProgress}
-                  IsPicture={false}
-                />
-              ) : (
-                <div className="relative w-full h-full  flex items-center justify-center overflow-hidden rounded-md">
-                  <audio src={audioPictureCover} controls></audio>
-                  <button
-                    type="button"
-                    className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
-                    onClick={() => { deleteFile(audioPictureCover, false); }}
-                  >
-                    <MdDelete className="text-white" />
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-
-        <div className="flex items-center justify-end w-full p-4">
-          {isImageLoading || isAudioLoading ? (
-            <DisabledButton />
-          ) : (
-            <motion.button
-              whileTap={{ scale: 0.75 }}
-              className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
-            onClick={saveSong}
-            >
-              Send
-            </motion.button>
-          )}
-        </div>
+                <button
+                  type="button"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                  onClick={() => { deleteFile(songPictureCover, true); }}
+                >
+                  <MdDelete className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </div>
+
+      <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+        {isAudioLoading && <PictureLoader progress={audioUploadingProgress} />}
+        {!isAudioLoading && (
+          <>
+            {!audioPictureCover ? (
+              <FileUploader
+                updateState={setAudioPictureCover}
+                isLoading={setIsAudioLoading}
+                setProgress={setAudioUploadingProgress}
+                IsPicture={false}
+              />
+            ) : (
+              <div className="relative w-full h-full  flex items-center justify-center overflow-hidden rounded-md">
+                <audio src={audioPictureCover} controls></audio>
+                <button
+                  type="button"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                  onClick={() => { deleteFile(audioPictureCover, false); }}
+                >
+                  <MdDelete className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <div className="flex items-center justify-end w-full p-4">
+        {isImageLoading || isAudioLoading ? (
+          <DisabledButton />
+        ) : (
+          <motion.button
+            whileTap={{ scale: 0.75 }}
+            className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
+            onClick={saveSong}
+          >
+            Send
+          </motion.button>
+        )}
+      </div>
+
+
+      <p className=" text-xl font-semibold text-headingColor">Artist Details</p>
+      <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+        {isArtistUploading && <PictureLoader progress={artistUploadingProgress} />}
+        {!isArtistUploading && (
+          <>
+            {!artistImageCover ? (
+              <FileUploader
+                updateState={setArtistImageCover}
+                isLoading={setIsArtistUploading}
+                setProgress={setArtistUploadingProgress}
+                IsPicture={true}
+              />
+            ) : (
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <img src={artistImageCover}
+                  alt="uploaded image"
+                  className="w-full h-full object-cover" />
+
+                <button
+                  type="button"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                  onClick={() => { deleteFile(artistImageCover, true); }}
+                >
+                  <MdDelete className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <input type="text" placeholder="Type the artist: "
+        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+       border border-gray-300 bg-transparent"
+        value={artistName}
+        onChange={(event) => setArtistName(event.target.value)} />
+
+      <input type="text" placeholder="Type the X: "
+        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+       border border-gray-300 bg-transparent"
+        value={x}
+        onChange={(event) => setX(event.target.value)} />
+
+      <input type="text" placeholder="Type the Instagram: "
+        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+       border border-gray-300 bg-transparent"
+        value={instagram}
+        onChange={(event) => setInstagram(event.target.value)} />
+
+      <div className="flex items-center justify-end w-full p-4">
+        {isArtistUploading ? (
+          <DisabledButton />
+        ) : (
+          <motion.button
+            whileTap={{ scale: 0.75 }}
+            className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
+            onClick={saveArtist}
+          >
+            Send
+          </motion.button>
+        )}
+      </div>
+
+
+      <p className=" text-xl font-semibold text-headingColor">Album Details</p>
+      <div className=" w-full bg-card  backdrop-blur-md  w-min-[300px] h-300 rounded-md border-2 border-dotted border-gray-300 cursor-pointer">
+        {isAlbumUploading && <PictureLoader progress={albumUploadingProgress} />}
+        {!isAlbumUploading && (
+          <>
+            {!albumImageCover ? (
+              <FileUploader
+                updateState={setAlbumImageCover}
+                isLoading={setIsAlbumUploading}
+                setProgress={setAlbumUploadingProgress}
+                IsPicture={true}
+              />
+            ) : (
+              <div className="relative w-full h-full overflow-hidden rounded-md">
+                <img src={albumImageCover}
+                  alt="uploaded image"
+                  className="w-full h-full object-cover" />
+
+                <button
+                  type="button"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                  onClick={() => { deleteFile(albumImageCover, true); }}
+                >
+                  <MdDelete className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <input type="text" placeholder="Type the album: "
+        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+       border border-gray-300 bg-transparent"
+        value={albumName}
+        onChange={(event) => setAlbumName(event.target.value)} />
+
+      <div className="flex items-center justify-end w-full p-4">
+        {isAlbumUploading ? (
+          <DisabledButton />
+        ) : (
+          <motion.button
+            whileTap={{ scale: 0.75 }}
+            className="px-8 py-2 rounded-md text-white bg-red-600 hover:shadow-lg"
+            onClick={saveAlbum}
+          >
+            Send
+          </motion.button>
+        )}
+      </div>
+    </div >
   );
 };
 
@@ -226,7 +409,6 @@ export const PictureLoader = ({ progress }) => {
 };
 
 export const FileUploader = ({ updateState, isLoading, setProgress, IsPicture }) => {
-
   const uploadFile = (event) => {
     isLoading(true);
     const uploadedFile = event.target.files[0];
@@ -237,12 +419,14 @@ export const FileUploader = ({ updateState, isLoading, setProgress, IsPicture })
       (snapshot) => {
         setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
       },
-      (error) => console.log(error),
+      (error) => {
+        console.log(error)
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           updateState(downloadURL);
           isLoading(false);
-        })
+        });
       }
     );
   }
@@ -266,10 +450,10 @@ export const FileUploader = ({ updateState, isLoading, setProgress, IsPicture })
 
 export const DisabledButton = () => {
   return (
-    <button disabled type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
+    <button disabled type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
     focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 
     dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
-      <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin"
+      <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin"
         viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 
         50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094

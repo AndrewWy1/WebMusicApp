@@ -4,13 +4,9 @@ import { useStateValue } from '../context/StateProvider';
 import { deleteSongById, getAllSongs } from '../api';
 import { motion } from 'framer-motion';
 import { IoTrash } from 'react-icons/io5';
-import AlertError from "./AlertError";
-import AlertSuccess from "./AlertSuccess";
 
 const SongCard = ({ data, index }) => {
   const [isDeleted, setIsDeleted] = useState(false);
-  const [alert, setAlert] = useState(false);
-  const [alertMsg, setAlertMsg] = useState(null);
 
   const [{ allSongs, song, isSongPlaying }, dispatch] = useStateValue();
 
@@ -34,8 +30,6 @@ const SongCard = ({ data, index }) => {
     deleteSongById(id).then((res) => {
       // console.log(res.data);
       if (res.data.success) {
-        setAlert("success");
-        setAlertMsg(res.data.msg);
         getAllSongs().then((data) => {
           dispatch({
             type: actionType.SET_ALL_SONGS,
@@ -43,15 +37,8 @@ const SongCard = ({ data, index }) => {
           });
         });
         setTimeout(() => {
-          setAlert(false);
         }, 4000);
-      } else {
-        setAlert("error");
-        setAlertMsg(res.data.msg);
-        setTimeout(() => {
-          setAlert(false);
-        }, 4000);
-      }
+      } 
     });
   };
   return (
@@ -112,16 +99,6 @@ const SongCard = ({ data, index }) => {
           <IoTrash className="text-base text-red-400 drop-shadow-md hover:text-red-600" />
         </motion.i>
       </div>
-
-      {alert && (
-        <>
-          {alert === "success" ? (
-            <AlertSuccess msg={alertMsg} />
-          ) : (
-            <AlertError msg={alertMsg} />
-          )}
-        </>
-      )}
     </motion.div>
   );
 };

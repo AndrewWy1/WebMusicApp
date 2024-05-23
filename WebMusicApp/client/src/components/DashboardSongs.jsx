@@ -46,7 +46,7 @@ const DashboardSongs = () => {
         </i>
       </div>
 
-      <div className='relative w-full my-4 p-4 border border-gray-300 rounded-md'>
+      <div className='relative w-full my-4 p-4 py-16 border border-gray-300 rounded-md'>
         <div className=' absolute top-4 left-4'>
           <p className='text-xl font-bold'>
             <span className=' text-sm font-semibold text-textColor'>Count: </span>

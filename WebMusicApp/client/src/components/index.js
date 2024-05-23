@@ -16,8 +16,3 @@ export {default as DashboardArtists} from "./DashboardArtists";
 export {default as DashboardAlbums} from "./DashboardAlbums";
 export {default as DashboardNewSong} from "./DashboardNewSong";
 
-
-//addisional
-export {default as AlertError} from "./AlertError";
-export {default as AlertSuccess} from "./AlertSuccess";
-
