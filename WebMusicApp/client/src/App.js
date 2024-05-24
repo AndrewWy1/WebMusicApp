@@ -47,7 +47,7 @@ const App = () => {
 
   return (
     <AnimatePresence mode='wait'>
-      <div className="h-auto min-w-[680px] bg-primary flex items-center justify-center">
+      <div className="h-full min-w-[680px] text-blue-950 bg-thirdColor flex items-center justify-center">
         <Routes>
           <Route path='/login' element={<Login setAuth={setAuth} />} />
           <Route path='/' element={<Home />} />

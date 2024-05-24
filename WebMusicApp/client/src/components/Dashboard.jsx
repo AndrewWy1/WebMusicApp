@@ -16,7 +16,7 @@ import { useStateValue } from '../context/StateProvider';
 
 const Dashboard = () => {
     return (
-        <div className=' w-full h-auto flex flex-col items-center justify-center bg-primary'>
+        <div className=' w-full h-full flex flex-col items-center justify-cente bg-thirdColor'>
             <Header />
 
             <div className='w-[60%] my-2 p-4 flex items-center justify-evenly'>

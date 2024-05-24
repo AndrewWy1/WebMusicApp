@@ -24,20 +24,6 @@ const MusicPlayer = () => {
       });
   };
 
-  // const togglePlayer = () => {
-  //   if (miniPlayer) {
-  //     dispatch({
-  //       type: actionType.SET_MINI_PLAYER,
-  //       miniPlayer: false,
-  //     });
-  //   } else {
-  //     dispatch({
-  //       type: actionType.SET_MINI_PLAYER,
-  //       miniPlayer: true,
-  //     });
-  //   }
-  // };
-
   const nextTrack = () => {
     if (songIndex > allSongs.length-1) {
       dispatch({
@@ -131,23 +117,6 @@ const MusicPlayer = () => {
         </div>
       </div>
 
-      {/* {miniPlayer && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="fixed right-2 bottom-2 "
-        >
-          <div className="w-40 h-40 rounded-full flex items-center justify-center  relative ">
-            <div className="absolute inset-0 rounded-full bg-red-600 blur-xl animate-pulse"></div>
-            <img
-              onClick={togglePlayer}
-              src={allSongs[songIndex]?.imageURL}
-              className="z-50 w-32 h-32 rounded-full object-cover cursor-pointer"
-              alt=""
-            />
-          </div>
-        </motion.div>
-      )} */}
       </div>
   );
 };
@@ -203,7 +172,7 @@ const MusicPlayer = () => {
                     ? music?.name.slice(0, 20)
                     : music?.name
                 }`}{" "}
-                <span className="text-base">({music?.album})</span>
+                <span className="text-base">{music?.album}</span>
               </p>
               <p className="text-textColor">
                 {music?.artist}{" "}

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useStateValue } from '../context/StateProvider';
 import { getAllAlbums } from '../api';
 import { actionType } from '../context/reducer';
-import SongCard from './SongCard';
+import Card from './Card';
 
 const DashboardAlbums = () => {
 
@@ -32,7 +32,7 @@ export const AlbumContainer = (({ data }) => {
   return (
     <div className=' w-full flex flex-wrap gap-3 items-center justify-evenly'>
       {data && data.map((artist, index) =>
-        <SongCard key={artist._id} data={artist} index={index} type="album"/>)}
+        <Card key={artist._id} data={artist} index={index} type="album"/>)}
     </div>
   )
 });

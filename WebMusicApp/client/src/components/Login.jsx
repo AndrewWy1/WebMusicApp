@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { LoginBg } from "../assets/video";
 import { FcGoogle } from "react-icons/fc";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { app } from "../config/firebase.cofig";
@@ -54,12 +53,7 @@ const Login = ({ setAuth }) => {
 
 
   return (
-    <div className="relative w-screen h-screen">
-      <video src={LoginBg}
-        type="video/mp4"
-        autoPlay muted loop
-        className="w-full h-full object-cover"
-      />
+    <div className="relative w-screen h-screen bg-fourthColor">
       <div className="absolute inset-0 bg-darkOverlay flex items-center justify-center p-4">
         <div className="w-full md:w-375 p-4 bg-lightOverlay shadow-2xl rounded-md backdrop-blur-md flex flex-col items-center justify-center">
           <div

@@ -5,16 +5,14 @@ import { actionType } from "../context/reducer";
 import { FaUsers } from "react-icons/fa";
 import { RiUserStarFill } from "react-icons/ri";
 import { GiLoveSong, GiMusicalNotes } from "react-icons/gi";
-import { bgColors } from "../utils/styles";
 
 export const DashboardCard = ({ icon, name, count }) => {
 
-  const bg_color = bgColors[parseInt(Math.random() * bgColors.length)];
+
 
   return (
     <div
-      style={{ background: `${bg_color}` }}
-      className='p-4 w-40 gap-3 h-auto rounded-lg shadow-md flex flex-col items-center justify-center'>
+      className='p-4 w-40 gap-3 h-auto bg-secondColor rounded-lg shadow-md flex flex-col items-center justify-center '>
       {icon}
       <p className='text-xl text-textColor font-semibold'>{name}</p>
       <p className='text-xl text-textColor'>{count}</p>
@@ -65,7 +63,7 @@ const DashboardHome = () => {
   }, [])
 
   return (
-    <div className="w-full p-6 flex items-center justify-evenly flex-wrap">
+    <div className="w-full h-screen p-6 flex items-start justify-evenly flex-wrap bg-thirdColor">
       <DashboardCard icon={<FaUsers className="text-3xl text-textColor" />} name={"Users"} count={allUsers?.length > 0 ? allUsers?.length : 0} />
       <DashboardCard icon={<GiLoveSong className="text-3xl text-textColor" />} name={"Songs"} count={allSongs?.length > 0 ? allSongs?.length : 0} />
       <DashboardCard icon={<RiUserStarFill className="text-3xl text-textColor" />} name={"Artist"} count={allArtists?.length > 0 ? allArtists?.length : 0} />

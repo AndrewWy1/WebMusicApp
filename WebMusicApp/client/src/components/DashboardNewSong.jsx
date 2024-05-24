@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  getStorage,
   ref,
   getDownloadURL,
   uploadBytesResumable,
@@ -128,7 +127,6 @@ const DashboardNewSong = () => {
       dispatch({ type: actionType.SET_ARTIST_FILTER, artistFilter: null });
       dispatch({ type: actionType.SET_ALBUM_FILTER, albumFilter: null });
       dispatch({ type: actionType.SET_GENRE_FILTER, genreFilter: null });
-      // setDuration(null);
     };
   };
 
@@ -190,10 +188,10 @@ const DashboardNewSong = () => {
   }
 
   return (
-    <div className='flex flex-col w-880 items-center justify-center p-4 border border-gray-300 rounded gap-4'>
+    <div className='flex flex-col w-full items-center justify-center p-4 border border-gray-300 rounded gap-4'>
       <input type="text" placeholder="Type the song: "
-        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
-       border border-gray-300 bg-transparent"
+        className="w-full p-2 rounded-md text-base font-semibold text-white outline-none shadow-sm
+       border border-white bg-transparent"
         onChange={(event) => setSongName(event.target.value)}
         value={songName} />
 
@@ -308,19 +306,19 @@ const DashboardNewSong = () => {
       </div>
 
       <input type="text" placeholder="Type the artist: "
-        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+        className="w-full p-2 rounded-md text-base font-semibold text-white outline-none shadow-sm
        border border-gray-300 bg-transparent"
         value={artistName}
         onChange={(event) => setArtistName(event.target.value)} />
 
       <input type="text" placeholder="Type the X: "
-        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+        className="w-full p-2 rounded-md text-base font-semibold text-white outline-none shadow-sm
        border border-gray-300 bg-transparent"
         value={x}
         onChange={(event) => setX(event.target.value)} />
 
       <input type="text" placeholder="Type the Instagram: "
-        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+        className="w-full p-2 rounded-md text-base font-semibold text-white outline-none shadow-sm
        border border-gray-300 bg-transparent"
         value={instagram}
         onChange={(event) => setInstagram(event.target.value)} />
@@ -372,7 +370,7 @@ const DashboardNewSong = () => {
       </div>
 
       <input type="text" placeholder="Type the album: "
-        className="w-full p-2 rounded-md text-base font-semibold text-textColor outline-none shadow-sm
+        className="w-full p-2 rounded-md text-base font-semibold text-white outline-none shadow-sm
        border border-gray-300 bg-transparent"
         value={albumName}
         onChange={(event) => setAlbumName(event.target.value)} />

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink } from "react-router-dom";
-import { IoAdd, IoPause, IoPlay, IoTrash } from "react-icons/io5";
+import { IoAdd } from "react-icons/io5";
 import { AiOutlineClear } from "react-icons/ai";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer"
 import { getAllSongs } from "../api/index";
-import { SongCard } from "./index";
+import { Card } from "./index";
 
 const DashboardSongs = () => {
 
@@ -36,7 +36,7 @@ const DashboardSongs = () => {
 
         <input type="text" placeholder='Search:' value={songFilter}
           className={`w-52 px-4 py-2 border ${isForcus ? "border-gray-500 shadow-md" : "border-gray-300"} 
-          rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-textColor font-semibold`}
+          rounded-md bg-transparent outline-none duration-150 transition-all ease-in-out text-base text-white font-semibold`}
           onChange={(event) => setsongFilter(event.target.value)}
           onBlur={() => { setIsForcus(false) }}
           onFocus={() => setIsForcus(true)} />
@@ -47,14 +47,6 @@ const DashboardSongs = () => {
       </div>
 
       <div className='relative w-full my-4 p-4 py-16 border border-gray-300 rounded-md'>
-        <div className=' absolute top-4 left-4'>
-          <p className='text-xl font-bold'>
-            <span className=' text-sm font-semibold text-textColor'>Count: </span>
-            {allSongs?.length}
-          </p>
-        </div>
-
-
         <SongContainer data={allSongs} />
       </div>
     </div>
@@ -65,7 +57,7 @@ export const SongContainer = (({ data }) => {
   return (
     <div className=' w-full flex flex-wrap gap-3 items-center justify-evenly'>
       {data && data.map((song, index) =>
-        <SongCard key={song._id} data={song} index={index} type="song"/>)}
+        <Card key={song._id} data={song} index={index} type="song"/>)}
     </div>
   )
 });

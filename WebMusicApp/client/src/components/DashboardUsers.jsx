@@ -25,11 +25,6 @@ const DashboardUsers = () => {
     <div className='w-full p-4 flex items-center justify-center flex-col'>
       <div className=' relative w-full py-12 min-h-[400px] overflow-x-scroll my-4 flex flex-col items-center justify-start 
       p-4 border border-gray-300 rounded-md gap-3'>
-        <div className=' absolute top-4 left-4'>
-          <p className=' text-sm font-semibold'>
-            Count: <span className='text-xl font-bold text-textColor'>{allUsers?.length}</span>
-          </p>
-        </div>
 
         <div className='w-full min-w-[750px] flex items-center justify-between'>
           <p className='text-sm text-textColor font-semibold w-275 min-w-[160px] text-center'>Image</p>
@@ -90,12 +85,12 @@ export const DashboardUserCard = ({ data, index }) => {
 
   return (
     <motion.div key={index} className='relative w-full rounded-md flex items-center justify-between py-4 bg-lightOverlay cursor-pointer
-    hover:bg-card hover:shadow-md'>
+    hover:bg-secondColor hover:shadow-md'>
 
       {
         data._id !== user?.user._id && (
-          <motion.div whileTap={{ scale: 0.75 }} className='absolute left-4 w-8 h-8 rounded-md flex items-center justify-center bg-gray-200'>
-            <MdDelete className='text-xl text-red-400 hover:text-red-500' onClick={() => deleteUser(data._id)} />
+          <motion.div whileTap={{ scale: 0.75 }} className='absolute left-4 w-8 h-8 rounded-md flex items-center justify-center bg-firstColor'>
+            <MdDelete className='text-xl text-fourthColor hover:text-thirdColor' onClick={() => deleteUser(data._id)} />
           </motion.div>
         )
       }
@@ -128,7 +123,7 @@ export const DashboardUserCard = ({ data, index }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             className='absolute z-10 top-6 right-4 p-4 flex items-start flex-col gap-4 bg-white shadow-xl rounded-md'>
-            <p className=' text-textColor text-xs font-semibold'>
+            <p className=' text-fourthColor text-xs font-semibold'>
               Do you want to change users role to <span className='font-bold'>{data.role === "admin" ? "memder" : "admin"} ?</span>
             </p>
 
